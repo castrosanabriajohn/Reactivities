@@ -13,6 +13,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using MediatR;
+using Application.Activities;
+using AutoMapper;
+using Application.Core;
 
 namespace API
 {
@@ -51,6 +55,11 @@ namespace API
                     // Ensures that the origin of the request is always from our client application
                 });
             });
+            // Needs to know where the handlers are located and which assembly they're located in 
+            // Application project is going to be compiled into a different assembly that API project
+            services.AddMediatR(typeof(List.Handler).Assembly); // Tells mediatr where to find the handlers
+            // Add automapping as a service and specifying the assembly where mapping profiles are located
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
