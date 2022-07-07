@@ -60,7 +60,7 @@ const ActivityForm = ({
         <Form.Input
           placeholder="City"
           value={activity.city}
-          name="date"
+          name="city"
           onChange={handleInputChange}
         />
         <Form.Input
