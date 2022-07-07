@@ -31,6 +31,15 @@ function App() {
   function handleCloseForm() {
     setEditMode(false);
   }
+  function handleCreateOrEditActivity(activity: Activity) {
+    activity.id
+      ? setActivities([
+          ...activities.filter((a) => a.id !== activity.id),
+          activity,
+        ])
+      : setActivities([...activities, activity]);
+    setEditMode(false);
+  }
   return (
     <>
       <NavBar openForm={handleOpenForm} />
@@ -43,6 +52,7 @@ function App() {
           editMode={editMode}
           openForm={handleOpenForm}
           closeForm={handleCloseForm}
+          createOrEdit={handleCreateOrEditActivity}
         />
       </Container>
     </>
