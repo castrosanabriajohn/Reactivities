@@ -5,6 +5,7 @@ import { Activity } from "../models/activity";
 import NavBar from "./NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import agent from "../api/agent";
+import LoadingComponent from "./LoadingComponent";
 
 function App() {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -12,6 +13,7 @@ function App() {
     Activity | undefined
   >(undefined);
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     agent.activitiesRequests.list().then((response) => {
       let _activities: Activity[] = [];
@@ -20,6 +22,7 @@ function App() {
         _activities.push(_activity);
       });
       setActivities(_activities);
+      setLoading(false);
     });
   }, []);
   function handleSelectActivity(id: string) {
@@ -47,6 +50,7 @@ function App() {
   function handleDeleteActivity(id: string) {
     setActivities([...activities.filter((a) => a.id !== id)]);
   }
+  if (loading) return <LoadingComponent />;
   return (
     <>
       <NavBar openForm={handleOpenForm} />
