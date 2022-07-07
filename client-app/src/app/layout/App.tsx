@@ -14,7 +14,12 @@ function App() {
   const [editMode, setEditMode] = useState(false);
   useEffect(() => {
     agent.activitiesRequests.list().then((response) => {
-      setActivities(response);
+      let _activities: Activity[] = [];
+      response.forEach((_activity) => {
+        _activity.date = _activity.date.split("T")[0];
+        _activities.push(_activity);
+      });
+      setActivities(_activities);
     });
   }, []);
   function handleSelectActivity(id: string) {
