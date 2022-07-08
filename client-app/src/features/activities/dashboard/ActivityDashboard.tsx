@@ -33,6 +33,7 @@ const ActivityDashboard = ({
       <Grid.Column width="10">
         <ActivityList
           activities={activities}
+          submitting={submitting}
           selectActivity={selectActivity}
           deleteActivity={deleteActivity}
         />
