@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Container } from "semantic-ui-react";
+import { Button, Container } from "semantic-ui-react";
 import { Activity } from "../models/activity";
 import NavBar from "./NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import { useStore } from "../stores/store";
+import { observer } from "mobx-react-lite";
 
 function App() {
   const { activityStore } = useStore();
@@ -76,6 +77,11 @@ function App() {
       <NavBar openForm={handleOpenForm} />
       <Container style={{ marginTop: "7em" }}>
         <h2>{activityStore.title}</h2>
+        <Button
+          content="Add ! sign"
+          positive
+          onClick={activityStore.setTitle}
+        />
         <ActivityDashboard
           activities={activities}
           selectedActivity={selectedActivity}
@@ -92,5 +98,6 @@ function App() {
     </>
   );
 }
-
-export default App;
+// Observer higher order function is going to return the App component with additional functionality
+// for instance it will enable the action to observe observables in the store
+export default observer(App);
