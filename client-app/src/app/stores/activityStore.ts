@@ -4,8 +4,8 @@ import { Activity } from "../models/activity";
 
 export default class ActivityStore {
   activityList: Activity[] = [];
-  currentActivity: Activity | null = null;
-  toggleEditForm: boolean = false;
+  currentActivity: Activity | undefined = undefined;
+  formFlag: boolean = false;
   isLoadingFlag: boolean = false;
   initialLoadingState: boolean = false;
   constructor() {
@@ -35,5 +35,20 @@ export default class ActivityStore {
       console.log(e);
       runInAction(() => (this.initialLoadingState = false));
     }
+  };
+
+  setCurrentActivity = (id: string) =>
+    (this.currentActivity = this.activityList.find((a) => a.id === id));
+
+  dropCurrentActivity = () => (this.currentActivity = undefined);
+
+  toggleFormFlag = () => (this.formFlag = !this.formFlag);
+
+  openForm = (id?: string) => {
+    // Checks the presence id to decide whether to edit or create
+    id
+      ? (this.currentActivity = this.setCurrentActivity(id)) // if present set the current activity to match the parameter
+      : this.dropCurrentActivity(); // Otherwise drop the current activity to create new activity with the form
+    this.toggleFormFlag();
   };
 }

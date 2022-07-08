@@ -1,19 +1,16 @@
+import { observer } from "mobx-react-lite";
 import React, { ChangeEvent, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
 interface Props {
-  activity: Activity | undefined;
-  closeForm: () => void;
   createOrEdit: (activity: Activity) => void;
   submitting: boolean;
 }
-const ActivityForm = ({
-  activity: selectedActivity,
-  closeForm,
-  createOrEdit,
-  submitting,
-}: Props) => {
-  const initialState = selectedActivity ?? {
+export const ActivityForm = ({ createOrEdit, submitting }: Props) => {
+  const { activityStore } = useStore();
+  const { currentActivity, toggleFormFlag } = activityStore;
+  const initialState = currentActivity ?? {
     id: "",
     title: "",
     category: "",
@@ -84,10 +81,10 @@ const ActivityForm = ({
           floated="right"
           type="button"
           content="Cancel"
-          onClick={closeForm}
+          onClick={toggleFormFlag}
         />
       </Form>
     </Segment>
   );
 };
-export default ActivityForm;
+export default observer(ActivityForm);
