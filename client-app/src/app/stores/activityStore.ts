@@ -1,13 +1,36 @@
 import { makeAutoObservable } from "mobx";
+import agent from "../api/agent";
+import { Activity } from "../models/activity";
 
 export default class ActivityStore {
-  title = "Hello from MobX!";
+  activityList: Activity[] = [];
+  currentActivity: Activity | null = null;
+  toggleEditForm: boolean = false;
+  isLoadingFlag: boolean = false;
+  initialLoadingState: boolean = false;
   constructor() {
     // No need to specify the properties and methods to make them observable
     makeAutoObservable(this);
   }
-  // Arrow function automatically binds the action to the class to make use of this keyword in the function
-  setTitle = () => {
-    this.title = this.title + "!";
+  // Create action to load the list of activities
+  loadActivityList = async () => {
+    // Non async operations should be placed outside the scope of the try catch block
+    this.initialLoadingState = true;
+    // Async operations should be placed inside the scope of the try catch block
+    try {
+      // The List operation is going to return the list of activities through the agent
+      // as an async operation it's going to await the result before executing any additional code that follows
+      const activityList = await agent.activitiesRequests.list();
+      // Perform date formatting to be displayed in the list and form
+      activityList.forEach((item) => {
+        item.date = item.date.split("T")[0]; // splits date and grabs first section
+        // Populate the observable directly adding each iterable item with the date property updated to the list
+        this.activityList.push(item);
+        this.initialLoadingState = false;
+      });
+    } catch (e) {
+      console.log(e);
+      this.initialLoadingState = false;
+    }
   };
 }
