@@ -8,13 +8,11 @@ import ActivityForm from "../form/ActivityForm";
 import ActivityList from "./ActivityList";
 interface Props {
   activities: Activity[];
-  createOrEdit: (activity: Activity) => void;
   deleteActivity: (id: string) => void;
   submitting: boolean;
 }
 const ActivityDashboard = ({
   activities,
-  createOrEdit,
   deleteActivity,
   submitting,
 }: Props) => {
@@ -31,9 +29,7 @@ const ActivityDashboard = ({
       </Grid.Column>
       <Grid.Column width="6">
         {currentActivity && !formFlag && <ActivityDetails />}
-        {formFlag && (
-          <ActivityForm createOrEdit={createOrEdit} submitting={submitting} />
-        )}
+        {formFlag && <ActivityForm />}
       </Grid.Column>
     </Grid>
   );

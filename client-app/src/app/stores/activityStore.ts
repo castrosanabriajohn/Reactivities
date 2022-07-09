@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Activity } from "../models/activity";
+import { v4 as uuid } from "uuid";
 
 export default class ActivityStore {
   activityList: Activity[] = [];
@@ -44,11 +45,45 @@ export default class ActivityStore {
 
   toggleFormFlag = () => (this.formFlag = !this.formFlag);
 
+  toggleLoadingFlag = () => (this.isLoadingFlag = !this.isLoadingFlag);
+
   openForm = (id?: string) => {
     // Checks the presence id to decide whether to edit or create
     id
       ? (this.currentActivity = this.setCurrentActivity(id)) // if present set the current activity to match the parameter
       : this.dropCurrentActivity(); // Otherwise drop the current activity to create new activity with the form
     this.toggleFormFlag();
+  };
+  createActivity = async (activity: Activity) => {
+    this.toggleLoadingFlag();
+    // As we're creating a new activity, we must set it with an id in order for it to be sent
+    activity.id = uuid();
+    try {
+      await agent.activitiesRequests.create(activity);
+      // In case of success, the store's list of activities is updated
+      this.activityList.push(activity);
+      this.setCurrentActivity(activity.id);
+      this.toggleFormFlag();
+    } catch (e) {
+      console.log(e);
+      this.toggleFormFlag();
+    }
+  };
+  updateActivity = async (activity: Activity) => {
+    this.toggleLoadingFlag();
+    try {
+      await agent.activitiesRequests.update(activity).then(() => {
+        this.activityList = [
+          ...this.activityList.filter((a) => a.id === activity.id),
+          activity,
+        ];
+        this.setCurrentActivity(activity.id);
+        this.toggleFormFlag();
+        this.toggleLoadingFlag();
+      });
+    } catch (e) {
+      console.log(e);
+      this.toggleLoadingFlag();
+    }
   };
 }
