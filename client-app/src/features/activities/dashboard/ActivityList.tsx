@@ -1,25 +1,21 @@
 import React, { SyntheticEvent, useState } from "react";
+import { observer } from "mobx-react-lite";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
-interface Props {
-  activities: Activity[];
-  submitting: boolean;
-  deleteActivity: (id: string) => void;
-}
 
-const ActivityList = ({ activities, submitting, deleteActivity }: Props) => {
+const ActivityList = () => {
+  const { activityStore } = useStore();
+  const { isLoadingFlag, activitiesByDate, deleteActivity } = activityStore;
   const [target, setTarget] = useState("");
   function handleDeletion(e: SyntheticEvent<HTMLButtonElement>, id: string) {
     setTarget(e.currentTarget.name);
     deleteActivity(id);
   }
-  const { activityStore } = useStore();
 
   return (
     <Segment>
       <Item.Group>
-        {activities.map((activity) => (
+        {activitiesByDate.map((activity) => (
           <Item key={activity.id}>
             <Item.Content>
               <Item.Header as="a">{activity.title}</Item.Header>
@@ -42,10 +38,8 @@ const ActivityList = ({ activities, submitting, deleteActivity }: Props) => {
                   floated="right"
                   content="Delete"
                   color="red"
-                  loading={submitting && target === activity.id}
-                  onClick={(e) => {
-                    handleDeletion(e, activity.id);
-                  }}
+                  loading={isLoadingFlag && target === activity.id}
+                  onClick={(e) => handleDeletion(e, activity.id)}
                 />
                 <Label basic content={activity.category} />
               </Item.Extra>
@@ -56,4 +50,4 @@ const ActivityList = ({ activities, submitting, deleteActivity }: Props) => {
     </Segment>
   );
 };
-export default ActivityList;
+export default observer(ActivityList);
