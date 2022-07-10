@@ -25,7 +25,7 @@ export default class ActivityStore {
       const list = await agent.activitiesRequests.list();
       list.forEach((item) => {
         item.date = item.date.split("T")[0];
-        this.activityRegistry.set(item.id, item);
+        runInAction(() => this.activityRegistry.set(item.id, item));
       });
       runInAction(() => (this.initialLoadingState = false));
     } catch (e) {
