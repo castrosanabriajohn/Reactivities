@@ -7,7 +7,7 @@ import ActivityForm from "../form/ActivityForm";
 import ActivityList from "./ActivityList";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-const ActivityDashboard = () => {
+export const ActivityDashboard = () => {
   const { activityStore } = useStore();
   const { currentActivity, formFlag } = activityStore;
   useEffect(() => {

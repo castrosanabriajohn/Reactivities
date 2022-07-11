@@ -2,6 +2,7 @@ import React, { SyntheticEvent, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
+import { Link } from "react-router-dom";
 
 const ActivityList = () => {
   const { activityStore } = useStore();
@@ -27,13 +28,10 @@ const ActivityList = () => {
                 </div>
               </Item.Description>
               <Item.Extra>
+                <Button floated="right" content="View" color="blue" />
                 <Button
-                  floated="right"
-                  content="View"
-                  color="blue"
-                  onClick={() => activityStore.setCurrentActivity(activity.id)}
-                />
-                <Button
+                  as={Link}
+                  to={`/activities/${activity.id}`}
                   name={activity.id}
                   floated="right"
                   content="Delete"
