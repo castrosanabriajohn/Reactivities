@@ -1,11 +1,13 @@
 import { observer } from "mobx-react-lite";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { Button, Form, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
+import { v4 as uuid } from "uuid";
 
 const ActivityForm = () => {
+  const history = useHistory();
   const { activityStore } = useStore();
   const {
     createActivity,
@@ -14,6 +16,8 @@ const ActivityForm = () => {
     loadSingleActivity,
     initialLoadingState,
   } = activityStore;
+  const { id } = useParams<{ id: string }>();
+
   const [formActivity, setFormActivity] = useState({
     id: "",
     title: "",
@@ -23,16 +27,19 @@ const ActivityForm = () => {
     city: "",
     venue: "",
   });
-  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (id) loadSingleActivity(id).then((actitivity) => setFormActivity(actitivity!));
   }, [id, loadSingleActivity]); // as long as the dependencies don't change will only execute once
 
-  const handleSubmit = () =>
-    formActivity.id
-      ? updateActivity(formActivity)
-      : createActivity(formActivity);
+  const handleSubmit = () => {
+    if (formActivity.id.length === 0) {
+      let newActivity = { ...formActivity, id: uuid() }
+      createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`));
+    } else {
+      updateActivity(formActivity).then(() => history.push(`/activities/${formActivity.id}`));
+    }
+  }
 
   function handleInputChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
