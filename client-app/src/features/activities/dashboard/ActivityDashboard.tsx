@@ -5,12 +5,12 @@ import { useStore } from "../../../app/stores/store";
 import ActivityList from "./ActivityList";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-export const ActivityDashboard = () => {
+const ActivityDashboard = () => {
   const { activityStore } = useStore();
-
+  const { loadActivityList, activityRegistry } = activityStore;
   useEffect(() => {
-    activityStore.loadActivityList();
-  }, [activityStore]);
+    if (activityRegistry.size <= 1) loadActivityList();
+  }, [activityRegistry.size, loadActivityList]);
   if (activityStore.initialLoadingState) return <LoadingComponent />;
   return (
     <Grid>
