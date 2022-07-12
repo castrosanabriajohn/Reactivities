@@ -23,10 +23,7 @@ export default class ActivityStore {
     this.initialLoadingState = true;
     try {
       const list = await agent.activitiesRequests.list();
-      list.forEach((item) => {
-        item.date = item.date.split("T")[0];
-        runInAction(() => this.activityRegistry.set(item.id, item));
-      });
+      list.forEach((item) => this.helperSetActivity(item));
       runInAction(() => (this.initialLoadingState = false));
     } catch (e) {
       console.log(e);
@@ -34,21 +31,41 @@ export default class ActivityStore {
     }
   };
 
-  setCurrentActivity = (id: string) =>
-    (this.currentActivity = this.activityRegistry.get(id));
+  loadSingleActivity = async (id: string) => {
+    let activity = this.helperGetSingleActivity(id);
+    if (activity) {
+      this.currentActivity = activity;
+    } else {
+      this.toggleInitialLoadingState();
+      try {
+        activity = await agent.activitiesRequests.details(id); // call API
+        this.helperSetActivity(activity); // Set date & update registry
+        this.currentActivity = activity;
+        this.toggleInitialLoadingState();
+      } catch (err) {
+        console.log(err);
+        this.toggleInitialLoadingState();
+      }
+    }
+    console.log(this.initialLoadingState);
+    console.log(this.currentActivity?.description);
+  };
 
-  dropCurrentActivity = () => (this.currentActivity = undefined);
+  private helperGetSingleActivity = (id: string) => {
+    return this.activityRegistry.get(id);
+  };
+
+  private helperSetActivity = (activity: Activity) => {
+    activity.date = activity.date.split("T")[0];
+    runInAction(() => this.activityRegistry.set(activity.id, activity));
+  };
+
+  toggleInitialLoadingState = () =>
+    (this.initialLoadingState = !this.initialLoadingState);
 
   toggleFormFlag = () => (this.formFlag = !this.formFlag);
 
   toggleLoadingFlag = () => (this.isLoadingFlag = !this.isLoadingFlag);
-
-  openForm = (id?: string) => {
-    id
-      ? (this.currentActivity = this.setCurrentActivity(id))
-      : this.dropCurrentActivity();
-    this.toggleFormFlag();
-  };
 
   createActivity = async (activity: Activity) => {
     this.toggleLoadingFlag();
@@ -56,7 +73,7 @@ export default class ActivityStore {
     try {
       await agent.activitiesRequests.create(activity);
       this.activityRegistry.set(activity.id, activity);
-      this.setCurrentActivity(activity.id);
+      this.currentActivity = activity;
       this.toggleFormFlag();
       this.toggleLoadingFlag();
     } catch (e) {
@@ -70,7 +87,7 @@ export default class ActivityStore {
     try {
       await agent.activitiesRequests.update(activity).then(() => {
         this.activityRegistry.set(activity.id, activity);
-        this.setCurrentActivity(activity.id);
+        this.currentActivity = activity;
         this.toggleFormFlag();
         this.toggleLoadingFlag();
       });
@@ -85,7 +102,6 @@ export default class ActivityStore {
     try {
       await agent.activitiesRequests.delete(id).then(() => {
         this.activityRegistry.delete(id);
-        if (this.currentActivity?.id === id) this.dropCurrentActivity();
         this.toggleLoadingFlag();
       });
     } catch (e) {

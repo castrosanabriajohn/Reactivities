@@ -7,7 +7,6 @@ export const ActivityForm = () => {
   const { activityStore } = useStore();
   const {
     currentActivity,
-    toggleFormFlag,
     createActivity,
     updateActivity,
     isLoadingFlag,
@@ -87,7 +86,7 @@ export const ActivityForm = () => {
           floated="right"
           type="button"
           content="Cancel"
-          onClick={toggleFormFlag}
+          onClick={() => null}
         />
       </Form>
     </Segment>

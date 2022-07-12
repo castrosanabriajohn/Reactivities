@@ -28,10 +28,8 @@ const ActivityList = () => {
                 </div>
               </Item.Description>
               <Item.Extra>
-                <Button floated="right" content="View" color="blue" />
+                <Button as={Link} to={`/activities/${activity.id}`} floated="right" content="View" color="blue" />
                 <Button
-                  as={Link}
-                  to={`/activities/${activity.id}`}
                   name={activity.id}
                   floated="right"
                   content="Delete"

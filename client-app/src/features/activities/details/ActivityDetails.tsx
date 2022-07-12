@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Button, Card, Image } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
-export const ActivityDetails = () => {
+import { useParams } from "react-router-dom";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+
+const ActivityDetails = () => {
   const { activityStore } = useStore();
-  const { currentActivity, openForm, dropCurrentActivity } = activityStore;
-  if (!currentActivity) return null;
+  const { currentActivity, loadSingleActivity, initialLoadingState } = activityStore;
+  const { id } = useParams<{ id: string }>();
+  useEffect(() => {
+    if (id) loadSingleActivity(id);
+  }, [id, loadSingleActivity])
+  if (initialLoadingState || !currentActivity) return <LoadingComponent />;
   return (
     <Card fluid>
       <Image src={`/assets/categoryImages/${currentActivity.category}.jpg`} />
@@ -22,13 +29,13 @@ export const ActivityDetails = () => {
             basic
             color="blue"
             content="Edit"
-            onClick={() => openForm(currentActivity.id)}
+            onClick={() => null}
           />
           <Button
             basic
             color="grey"
             content="Cancel"
-            onClick={dropCurrentActivity}
+            onClick={() => null}
           />
         </Button.Group>
       </Card.Content>
