@@ -34,14 +34,16 @@ export default class ActivityStore {
   loadSingleActivity = async (id: string) => {
     let activity = this.helperGetSingleActivity(id);
     if (activity) {
-      this.currentActivity = activity;
+      runInAction(() => (this.currentActivity = activity));
+      return activity;
     } else {
       this.toggleInitialLoadingState();
       try {
         activity = await agent.activitiesRequests.details(id); // call API
         this.helperSetActivity(activity); // Set date & update registry
-        this.currentActivity = activity;
+        runInAction(() => (this.currentActivity = activity));
         this.toggleInitialLoadingState();
+        return activity;
       } catch (err) {
         console.log(err);
         this.toggleInitialLoadingState();

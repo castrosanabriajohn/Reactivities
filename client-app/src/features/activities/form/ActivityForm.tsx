@@ -1,17 +1,20 @@
 import { observer } from "mobx-react-lite";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Button, Form, Segment } from "semantic-ui-react";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 
-export const ActivityForm = () => {
+const ActivityForm = () => {
   const { activityStore } = useStore();
   const {
-    currentActivity,
     createActivity,
     updateActivity,
     isLoadingFlag,
+    loadSingleActivity,
+    initialLoadingState,
   } = activityStore;
-  const initialState = currentActivity ?? {
+  const [formActivity, setFormActivity] = useState({
     id: "",
     title: "",
     category: "",
@@ -19,9 +22,12 @@ export const ActivityForm = () => {
     date: "",
     city: "",
     venue: "",
-  };
+  });
+  const { id } = useParams<{ id: string }>();
 
-  const [formActivity, setFormActivity] = useState(initialState);
+  useEffect(() => {
+    if (id) loadSingleActivity(id).then((actitivity) => setFormActivity(actitivity!));
+  }, [id, loadSingleActivity]); // as long as the dependencies don't change will only execute once
 
   const handleSubmit = () =>
     formActivity.id
@@ -34,43 +40,45 @@ export const ActivityForm = () => {
     const { name, value } = event.target;
     setFormActivity({ ...formActivity, [name]: value });
   }
+  if (initialLoadingState) return <LoadingComponent content="Loading form..." />;
+
   return (
     <Segment clearing>
       <Form onSubmit={handleSubmit} autoComplete="off">
         <Form.Input
           placeholder="Title"
-          value={formActivity.title}
+          value={formActivity ? formActivity.title : ""}
           name="title"
           onChange={handleInputChange}
         />
         <Form.TextArea
           placeholder="Description"
-          value={formActivity.description}
+          value={formActivity ? formActivity.description : ""}
           name="description"
           onChange={handleInputChange}
         />
         <Form.Input
           placeholder="Category"
-          value={formActivity.category}
+          value={formActivity ? formActivity.category : ""}
           name="category"
           onChange={handleInputChange}
         />
         <Form.Input
           type="date"
           placeholder="Date"
-          value={formActivity.date}
+          value={formActivity ? formActivity.date : ""}
           name="date"
           onChange={handleInputChange}
         />
         <Form.Input
           placeholder="City"
-          value={formActivity.city}
+          value={formActivity ? formActivity.city : ""}
           name="city"
           onChange={handleInputChange}
         />
         <Form.Input
           placeholder="Venue"
-          value={formActivity.venue}
+          value={formActivity ? formActivity.venue : ""}
           name="venue"
           onChange={handleInputChange}
         />
