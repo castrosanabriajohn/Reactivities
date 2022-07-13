@@ -26,9 +26,9 @@ namespace Application.Activities
                 // get activity from database
                 var activity = await _context.Activities.FindAsync(request.Id);
                 // Validations
-                if (activity == null) return null; // result object returns null
+                /* if (activity == null) return null; */ // result object returns null
                 // Remove object from memory 
-                _context.Remove(activity);
+                _context.Remove(activity); // will generate exception if tries to remove unexising object
                 var result = await _context.SaveChangesAsync() > 0;
                 if (!result) return Result<Unit>.Failure("Failed while deleting activity");
                 return Result<Unit>.Success(Unit.Value);

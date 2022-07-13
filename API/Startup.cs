@@ -19,6 +19,7 @@ using AutoMapper;
 using Application.Core;
 using API.Extensions;
 using FluentValidation.AspNetCore;
+using API.Middleware;
 
 namespace API
 {
@@ -48,7 +49,9 @@ namespace API
         {
             if (env.IsDevelopment()) // check if environment is development
             {
-                app.UseDeveloperExceptionPage();
+                // Add exception middleware at the top 
+                app.UseMiddleware<ExceptionMiddleware>(); // custom exception middleware
+                /* app.UseDeveloperExceptionPage(); */ // request to use developer exception page
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
