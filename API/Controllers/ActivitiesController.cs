@@ -42,7 +42,7 @@ namespace API.Controllers
         {
             // Add the id to the object before we pass it to a handler
             activity.Id = id;
-            return Ok(await Mediator.Send(new Edit.Command { Activity = activity }));
+            return HandleResult(await Mediator.Send(new Edit.Command { Activity = activity }));
         }
         // Endpoint for deleting
         [HttpDelete("{id}")] // route parameter
