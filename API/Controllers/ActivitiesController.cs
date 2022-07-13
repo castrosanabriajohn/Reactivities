@@ -22,10 +22,11 @@ namespace API.Controllers
         [HttpGet("{id}")] // activities/id
         public async Task<IActionResult> GetActivity(Guid id) // IActionResult allows to return http responses
         {
-            var result = await Mediator.Send(new Details.Query { Id = id });
-            if (result.isSuccess && result.Value != null) return Ok(result.Value);
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
+            /*var result = await Mediator.Send(new Details.Query { Id = id });*/
+            /* if (result.isSuccess && result.Value != null) return Ok(result.Value);
             if (result.isSuccess && result.Value == null) return NotFound();
-            return BadRequest(result.Error);
+            return BadRequest(result.Error); */
             /* return await Mediator.Send(new Details.Query { Id = id }); */ // object initializer syntax
             /* return await _context.Activities.FindAsync(id); */
         }
