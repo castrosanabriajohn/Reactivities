@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 namespace API.Controllers
 {
-    [ApiController]
+    [ApiController] // ApiController attribute datas anotation for auto-generating http responses 
     [Route("api/[controller]")]
     public class BaseApiController : ControllerBase
     {
