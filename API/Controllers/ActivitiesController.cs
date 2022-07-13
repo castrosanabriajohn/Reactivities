@@ -49,7 +49,7 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteActivity(Guid id)
         {
             // Set the id when instanciating the class
-            return Ok(await Mediator.Send(new Delete.Command { Id = id }));
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
     }
 }
