@@ -20,9 +20,13 @@ namespace API.Controllers
             /* return await _context.Activities.ToListAsync(); */
         }
         [HttpGet("{id}")] // activities/id
-        public async Task<ActionResult<Activity>> GetActivity(Guid id)
+        public async Task<IActionResult> GetActivity(Guid id) // IActionResult allows to return http responses
         {
-            return await Mediator.Send(new Details.Query { Id = id }); // object initializer syntax
+            var result = await Mediator.Send(new Details.Query { Id = id });
+            if (result.isSuccess && result.Value != null) return Ok(result.Value);
+            if (result.isSuccess && result.Value == null) return NotFound();
+            return BadRequest(result.Error);
+            /* return await Mediator.Send(new Details.Query { Id = id }); */ // object initializer syntax
             /* return await _context.Activities.FindAsync(id); */
         }
         // Create endpoint for creating an activity
