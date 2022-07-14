@@ -7,6 +7,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import TextInput from "./TextInput";
 import { observer } from "mobx-react-lite";
+import TextArea from "./TextArea";
 
 const ActivityForm = () => {
   const history = useHistory();
@@ -73,7 +74,7 @@ const ActivityForm = () => {
         {({ handleSubmit }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
             <TextInput name="title" placeholder="Title" />
-            <TextInput placeholder="Description" name="description" />
+            <TextArea placeholder="Description" name="description" rows={3} />
             <TextInput placeholder="Category" name="category" />
             <TextInput placeholder="Date" name="date" />
             <TextInput placeholder="City" name="city" />
