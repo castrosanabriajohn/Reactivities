@@ -8,6 +8,8 @@ import * as Yup from "yup";
 import TextInput from "./TextInput";
 import { observer } from "mobx-react-lite";
 import TextArea from "./TextArea";
+import DropdownInput from "./DropdownInput";
+import { categoryOptions } from "./categoryOptions";
 
 const ActivityForm = () => {
   const history = useHistory();
@@ -75,7 +77,11 @@ const ActivityForm = () => {
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
             <TextInput name="title" placeholder="Title" />
             <TextArea placeholder="Description" name="description" rows={3} />
-            <TextInput placeholder="Category" name="category" />
+            <DropdownInput
+              options={categoryOptions}
+              placeholder="Category"
+              name="category"
+            />
             <TextInput placeholder="Date" name="date" />
             <TextInput placeholder="City" name="city" />
             <TextInput placeholder="Venue" name="venue" />
