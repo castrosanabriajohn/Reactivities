@@ -1,10 +1,12 @@
 import { observer } from "mobx-react-lite";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { Button, Form, Segment } from "semantic-ui-react";
+import { Button, FormField, Label, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import { v4 as uuid } from "uuid";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const ActivityForm = () => {
   const history = useHistory();
@@ -28,11 +30,16 @@ const ActivityForm = () => {
     venue: "",
   });
 
+  const validationSchema = Yup.object({
+    title: Yup.string().required("The title field is required."),
+  });
+
   useEffect(() => {
-    if (id) loadSingleActivity(id).then((actitivity) => setFormActivity(actitivity!));
+    if (id)
+      loadSingleActivity(id).then((actitivity) => setFormActivity(actitivity!));
   }, [id, loadSingleActivity]); // as long as the dependencies don't change will only execute once
 
-  const handleSubmit = () => {
+  /*  const handleSubmit = () => {
     if (formActivity.id.length === 0) {
       let newActivity = { ...formActivity, id: uuid() }
       createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`));
@@ -46,65 +53,49 @@ const ActivityForm = () => {
   ) {
     const { name, value } = event.target;
     setFormActivity({ ...formActivity, [name]: value });
-  }
-  if (initialLoadingState) return <LoadingComponent content="Loading form..." />;
+  } */
+  if (initialLoadingState)
+    return <LoadingComponent content="Loading form..." />;
 
   return (
     <Segment clearing>
-      <Form onSubmit={handleSubmit} autoComplete="off">
-        <Form.Input
-          placeholder="Title"
-          value={formActivity ? formActivity.title : ""}
-          name="title"
-          onChange={handleInputChange}
-        />
-        <Form.TextArea
-          placeholder="Description"
-          value={formActivity ? formActivity.description : ""}
-          name="description"
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          placeholder="Category"
-          value={formActivity ? formActivity.category : ""}
-          name="category"
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          type="date"
-          placeholder="Date"
-          value={formActivity ? formActivity.date : ""}
-          name="date"
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          placeholder="City"
-          value={formActivity ? formActivity.city : ""}
-          name="city"
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          placeholder="Venue"
-          value={formActivity ? formActivity.venue : ""}
-          name="venue"
-          onChange={handleInputChange}
-        />
-        <Button
-          floated="right"
-          positive
-          type="submit"
-          content="Submit"
-          onChange={handleInputChange}
-          loading={isLoadingFlag}
-        />
-        <Button
-          as={Link}
-          to="/activities"
-          floated="right"
-          type="button"
-          content="Cancel"
-        />
-      </Form>
+      <Formik
+        validationSchema={validationSchema}
+        enableReinitialize
+        initialValues={formActivity}
+        onSubmit={(values) => console.log(values)}
+      >
+        {({ handleSubmit }) => (
+          <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
+            <FormField>
+              <Field placeholder="Title" name="title" />
+              <ErrorMessage
+                name="title"
+                render={(error) => <Label basic color="red" content={error} />}
+              />
+            </FormField>
+            <Field placeholder="Description" name="description" />
+            <Field placeholder="Category" name="category" />
+            <Field type="date" placeholder="Date" name="date" />
+            <Field placeholder="City" name="city" />
+            <Field placeholder="Venue" name="venue" />
+            <Button
+              floated="right"
+              positive
+              type="submit"
+              content="Submit"
+              loading={isLoadingFlag}
+            />
+            <Button
+              as={Link}
+              to="/activities"
+              floated="right"
+              type="button"
+              content="Cancel"
+            />
+          </Form>
+        )}
+      </Formik>
     </Segment>
   );
 };
