@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Header, Segment } from "semantic-ui-react";
 import axios from "axios";
+import ValidationErrors from "./ValidationErrors";
 
 const TestErrors = () => {
   const baseUrl = "http://localhost:5000/api/"; // configure base URL to connect to API
-
+  const [errors, setErrors] = useState(null);
   // Functions that go to the endpoints of buggy controller to print the error message
 
   const handleNotFound = () =>
@@ -33,7 +34,7 @@ const TestErrors = () => {
       .catch((err) => console.log(err.response));
 
   const handleValidationError = () =>
-    axios.post(baseUrl + "activities", {}).catch((err) => console.log(err)); // only display error and not message because we're returning an array and not the error object
+    axios.post(baseUrl + "activities", {}).catch((err) => setErrors(err)); // only display error and not message because we're returning an array and not the error object
 
   return (
     <>
@@ -68,6 +69,7 @@ const TestErrors = () => {
           <Button onClick={handleBadGuid} content="Bad Guid" basic primary />
         </Button.Group>
       </Segment>
+      {errors && <ValidationErrors errors={errors} />}
     </>
   );
 };
