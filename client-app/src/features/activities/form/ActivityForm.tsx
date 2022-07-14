@@ -10,6 +10,7 @@ import { observer } from "mobx-react-lite";
 import TextArea from "./TextArea";
 import DropdownInput from "./DropdownInput";
 import { categoryOptions } from "./categoryOptions";
+import DateInput from "./DateInput";
 
 const ActivityForm = () => {
   const history = useHistory();
@@ -82,7 +83,13 @@ const ActivityForm = () => {
               placeholder="Category"
               name="category"
             />
-            <TextInput placeholder="Date" name="date" />
+            <DateInput
+              placeholderText="Date"
+              name="date"
+              showTimeSelect
+              timeCaption="time"
+              dateFormat="MMMM d, yyyy h:mm aa"
+            />
             <TextInput placeholder="City" name="city" />
             <TextInput placeholder="Venue" name="venue" />
             <Button
