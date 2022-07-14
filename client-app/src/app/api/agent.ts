@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { Activity } from "../models/activity";
+import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -18,9 +19,9 @@ axios.interceptors.response.use(
   },
   (error: AxiosError) => {
     const { data: d, status } = error.response!;
+    let data: any = d!;
     switch (status) {
       case 400:
-        let data: any = d!;
         if (data.errors) {
           const modalStateErrors = [];
           for (const key in data.errors) {
@@ -40,7 +41,8 @@ axios.interceptors.response.use(
         history.push("not-found");
         break;
       case 500:
-        toast.error("Server Error");
+        store.commonStore.setServerError(data);
+        history.push("/server-error");
         break;
     }
     return Promise.reject(error);
