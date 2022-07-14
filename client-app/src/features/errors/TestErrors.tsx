@@ -33,9 +33,7 @@ const TestErrors = () => {
       .catch((err) => console.log(err.response));
 
   const handleValidationError = () =>
-    axios
-      .post(baseUrl + "activities", {})
-      .catch((err) => console.log(err.response));
+    axios.post(baseUrl + "activities", {}).catch((err) => console.log(err)); // only display error and not message because we're returning an array and not the error object
 
   return (
     <>
