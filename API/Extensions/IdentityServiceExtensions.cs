@@ -16,7 +16,8 @@ namespace API.Extensions
             services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = false;
-            }).AddUserStore<DataContext>()
+            })
+            .AddEntityFrameworkStores<DataContext>()
             .AddSignInManager<SignInManager<AppUser>>();
             services.AddAuthentication();
             return services;
