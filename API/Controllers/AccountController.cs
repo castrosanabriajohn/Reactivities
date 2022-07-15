@@ -4,6 +4,7 @@ using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -40,6 +41,36 @@ namespace API.Controllers
                 };
             }
             return Unauthorized();
+        }
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto) // returns an user object including the token, automatically logged in
+        {
+            if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email))
+            {
+                return BadRequest("Email is already registered");
+            }
+            if (await _userManager.Users.AnyAsync(u => u.UserName == registerDto.UserName))
+            {
+                return BadRequest("Username is already registered");
+            }
+            var user = new AppUser
+            {
+                DisplayName = registerDto.DisplayName,
+                Email = registerDto.Email,
+                UserName = registerDto.UserName,
+            };
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            if (result.Succeeded)
+            {
+                return new UserDto
+                {
+                    DisplayName = user.DisplayName,
+                    UserName = user.UserName,
+                    Image = null,
+                    Token = _tokenService.CreateToken(user)
+                };
+            }
+            return BadRequest("Failed to register user");
         }
     }
 }
