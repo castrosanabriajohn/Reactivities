@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Microsoft.AspNetCore.Identity;
+using API.Services;
+
 namespace API.Extensions
 {
     public static class IdentityServiceExtensions
@@ -20,6 +22,7 @@ namespace API.Extensions
             .AddEntityFrameworkStores<DataContext>()
             .AddSignInManager<SignInManager<AppUser>>();
             services.AddAuthentication();
+            services.AddScoped<TokenService>(); // token service is now available when injected into the account controller scoped to the lifetime of the http request
             return services;
         }
     }
