@@ -11,6 +11,7 @@ import TextArea from "./TextArea";
 import DropdownInput from "./DropdownInput";
 import { categoryOptions } from "./categoryOptions";
 import DateInput from "./DateInput";
+import { Activity } from "../../../app/models/activity";
 
 const ActivityForm = () => {
   const history = useHistory();
@@ -24,12 +25,12 @@ const ActivityForm = () => {
   } = activityStore;
   const { id } = useParams<{ id: string }>();
 
-  const [formActivity, setFormActivity] = useState({
+  const [formActivity, setFormActivity] = useState<Activity>({
     id: "",
     title: "",
     category: "",
     description: "",
-    date: "",
+    date: null,
     city: "",
     venue: "",
   });
