@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.DTOs;
 using API.Services;
 using Domain;
@@ -32,13 +33,7 @@ namespace API.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false); // lock on failure disabled
             if (result.Succeeded)
             {
-                return new UserDto
-                {
-                    DisplayName = user.DisplayName,
-                    Image = null,
-                    Token = _tokenService.CreateToken(user),
-                    UserName = user.UserName,
-                };
+                return CreateUserObject(user);
             }
             return Unauthorized();
         }
@@ -62,15 +57,26 @@ namespace API.Controllers
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (result.Succeeded)
             {
-                return new UserDto
-                {
-                    DisplayName = user.DisplayName,
-                    UserName = user.UserName,
-                    Image = null,
-                    Token = _tokenService.CreateToken(user)
-                };
+                return CreateUserObject(user);
             }
             return BadRequest("Failed to register user");
+        }
+        [Authorize]// user info is taken from the token so it's required to be authenticated 
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email)); // User object is available as a claim principal
+            return CreateUserObject(user);
+        }
+        private UserDto CreateUserObject(AppUser user)
+        {
+            return new UserDto
+            {
+                DisplayName = user.DisplayName,
+                UserName = user.UserName,
+                Image = null,
+                Token = _tokenService.CreateToken(user)
+            };
         }
     }
 }
