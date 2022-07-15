@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { Activity } from "../models/activity";
+import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
@@ -52,11 +53,8 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
-
 // Create an object to store the common requests to be sent to axios [post, put, delete]
-
 const requests = {
   get: <T>(url: string) => axios.get<T>(url).then(responseBody),
   post: <T>(url: string, body = {}) =>
@@ -65,8 +63,6 @@ const requests = {
     axios.put<T>(url, body).then(responseBody),
   delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
-
-// Create an object to store the requests to a particular entity
 
 const activitiesRequests = {
   list: () => requests.get<Activity[]>("/activities"),
@@ -77,8 +73,16 @@ const activitiesRequests = {
   delete: (id: string) => requests.delete<void>(`/activities/${id}`),
 };
 
+const accountRequests = {
+  current: () => requests.get<User>("/account"),
+  login: (user: UserFormValues) => requests.post<User>("/account/login", user),
+  register: (user: UserFormValues) =>
+    requests.post<User>("/account/register", user),
+};
+
 const agent = {
   activitiesRequests,
+  accountRequests,
 };
 
 export default agent;
