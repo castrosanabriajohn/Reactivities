@@ -25,7 +25,7 @@ const DetailsInfo = ({ activity }: Props) => {
             <Icon name="calendar" size="large" color="teal" />
           </Grid.Column>
           <Grid.Column width={15}>
-            <span>{format(activity.date!, "dd MMMM yyyy h:mm aa")}</span>
+            <span>{format(activity.date!, "dd MMM yyyy h:mm aa")}</span>
           </Grid.Column>
         </Grid>
       </Segment>
