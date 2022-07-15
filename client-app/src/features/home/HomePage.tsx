@@ -20,8 +20,8 @@ export const HomePage = () => {
           inverted
           content="Welcome to the activities application"
         />
-        <Button as={Link} to="/activities" size="huge" inverted>
-          Go to activities
+        <Button as={Link} to="/login" size="huge" inverted>
+          Login
         </Button>
       </Container>
     </Segment>
