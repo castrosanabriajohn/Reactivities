@@ -1,8 +1,8 @@
 import React from "react";
 import { useStore } from "../../app/stores/store";
-import { Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import TextInput from "../activities/form/TextInput";
-import { Button } from "semantic-ui-react";
+import { Button, Label } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 
 const LoginForm = () => {
@@ -10,13 +10,28 @@ const LoginForm = () => {
   const { login } = userStore;
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
-      onSubmit={(values) => login(values)}
+      initialValues={{ email: "", password: "", error: null }}
+      onSubmit={(values, { setErrors }) =>
+        login(values).catch(
+          (error) => setErrors({ error: "Invalid email or password" }) // In case an error occurs in the catch block sets the error
+        )
+      }
     >
-      {({ handleSubmit, isSubmitting }) => (
+      {({ handleSubmit, isSubmitting, errors }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <TextInput name="email" placeholder="Email" />
           <TextInput name="password" placeholder="Password" type="password" />
+          <ErrorMessage
+            name="error"
+            render={() => (
+              <Label
+                content={errors.error}
+                style={{ marginBottom: 10 }}
+                basic
+                color="red"
+              />
+            )}
+          />
           <Button loading={isSubmitting} positive content="Login" fluid />
         </Form>
       )}

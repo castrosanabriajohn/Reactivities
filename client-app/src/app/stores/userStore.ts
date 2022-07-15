@@ -18,7 +18,7 @@ export default class UserStore {
       const user = await agent.accountRequests.login(creds);
       console.log(user);
     } catch (e) {
-      throw e;
+      throw e; // Throwing the error to the component will make it avaible to bwe catched by the onSubmit on the form
     }
   };
 }
