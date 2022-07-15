@@ -1,11 +1,13 @@
 using API.DTOs;
 using API.Services;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [AllowAnonymous] // in order for users to login this must be set to accept anonymous requests
     [ApiController] // add api controller attribute
     [Route("api/[controller]")] // add route specifying controller
     public class AccountController : ControllerBase

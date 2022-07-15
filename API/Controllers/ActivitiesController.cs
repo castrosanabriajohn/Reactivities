@@ -20,7 +20,6 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new List.Query(), cancellationToken));
             /* return await _context.Activities.ToListAsync(); */
         }
-        [Authorize] // authorization attribute
         [HttpGet("{id}")] // activities/id
         public async Task<IActionResult> GetActivity(Guid id) // IActionResult allows to return http responses
         {
