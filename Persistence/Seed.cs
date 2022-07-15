@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 
@@ -22,7 +18,7 @@ namespace Persistence
                 };
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(user, "Pa$$sw0rd");
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
             }
             // Checks for records in the database
