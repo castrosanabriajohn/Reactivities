@@ -58,7 +58,8 @@ namespace API
             }
             //app.UseHttpsRedirection(); -> for https
             app.UseRouting(); // middleware for routing  
-            app.UseCors("CorsPolicy"); // 
+            app.UseCors("CorsPolicy");
+            app.UseAuthentication(); // authentication service must be before authorization 
             app.UseAuthorization();
             // This middleware is responsible for routing the endpoints inside the controller
             app.UseEndpoints(endpoints =>

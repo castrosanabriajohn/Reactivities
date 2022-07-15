@@ -8,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Microsoft.AspNetCore.Identity;
 using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace API.Extensions
 {
@@ -21,7 +24,18 @@ namespace API.Extensions
             })
             .AddEntityFrameworkStores<DataContext>()
             .AddSignInManager<SignInManager<AppUser>>();
-            services.AddAuthentication();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true, // API will validate if the key is valid
+                    IssuerSigningKey = key,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+            });
             services.AddScoped<TokenService>(); // token service is now available when injected into the account controller scoped to the lifetime of the http request
             return services;
         }
