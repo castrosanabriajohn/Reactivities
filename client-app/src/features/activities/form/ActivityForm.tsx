@@ -60,12 +60,11 @@ const ActivityForm = () => {
       );
     }
   };
-  if (initialLoadingState)
-    return <LoadingComponent content="Loading form..." />;
+  if (initialLoadingState) return <LoadingComponent content="Cargando..." />;
 
   return (
     <Segment clearing>
-      <Header content="Activity Details" color="teal" />
+      <Header content="Detalles de la Actividad" color="teal" />
       <Formik
         validationSchema={validationSchema}
         enableReinitialize
@@ -74,29 +73,29 @@ const ActivityForm = () => {
       >
         {({ handleSubmit, isValid, isSubmitting, dirty }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
-            <TextInput name="title" placeholder="Title" />
-            <TextArea placeholder="Description" name="description" rows={3} />
+            <TextInput name="title" placeholder="Título" />
+            <TextArea placeholder="Descripción" name="description" rows={3} />
             <DropdownInput
               options={categoryOptions}
-              placeholder="Category"
+              placeholder="Categoría"
               name="category"
             />
             <DateInput
-              placeholderText="Date"
+              placeholderText="Fecha"
               name="date"
               showTimeSelect
               timeCaption="time"
               dateFormat="MMMM d, yyyy h:mm aa"
             />
-            <Header content="Location Details" color="teal" />
-            <TextInput placeholder="City" name="city" />
-            <TextInput placeholder="Venue" name="venue" />
+            <Header content="Detalles de Ubicación" color="teal" />
+            <TextInput placeholder="Ciudad" name="city" />
+            <TextInput placeholder="Lugar" name="venue" />
             <Button
               disabled={isSubmitting || !dirty || !isValid}
               floated="right"
               positive
               type="submit"
-              content="Submit"
+              content="Enviar"
               loading={isLoadingFlag}
             />
             <Button
@@ -104,7 +103,7 @@ const ActivityForm = () => {
               to="/activities"
               floated="right"
               type="button"
-              content="Cancel"
+              content="Cancelar"
             />
           </Form>
         )}

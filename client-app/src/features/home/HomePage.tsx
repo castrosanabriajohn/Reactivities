@@ -28,7 +28,7 @@ export const HomePage = () => {
             <Header
               as="h2"
               inverted
-              content="Bienvenido a la aplicación de NovaActividades"
+              content="Bienvenid@ a la Aplicación de Eventos y Actividades"
             />
             <Button as={Link} to="/activities" size="huge">
               Ir al tablero

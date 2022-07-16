@@ -38,7 +38,7 @@ const TestErrors = () => {
 
   return (
     <>
-      <Header as="h1" content="Test Error component" />
+      <Header as="h1" content="Componente de pruebas" />
       <Segment>
         <Button.Group widths="7">
           <Button onClick={handleNotFound} content="Not Found" basic primary />
