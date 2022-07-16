@@ -21,7 +21,7 @@ export default class UserStore {
       store.commonStore.setToken(user.token); // after login receive and store the token
       runInAction(() => (this.user = user)); // set the user
       history.push("/activities");
-      console.log(user);
+      store.modalStore.closeModal();
     } catch (e) {
       throw e; // Throwing the error to the component will make it avaible to bwe catched by the onSubmit on the form
     }

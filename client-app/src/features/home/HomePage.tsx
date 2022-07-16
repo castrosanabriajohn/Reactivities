@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { Container, Header, Segment, Image, Button } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/stores/store";
+import LoginForm from "../authentication/LoginForm";
 
 export const HomePage = () => {
   const {
+    modalStore: { openModal },
     userStore: { isLoggedIn },
   } = useStore();
   return (
@@ -18,7 +20,7 @@ export const HomePage = () => {
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          Activities
+          NovaActivities
         </Header>
         {isLoggedIn ? (
           <>
@@ -32,9 +34,14 @@ export const HomePage = () => {
             </Button>
           </>
         ) : (
-          <Button as={Link} to="/login" size="huge">
-            Login
-          </Button>
+          <>
+            <Button onClick={() => openModal(<LoginForm />)} size="huge">
+              Login
+            </Button>
+            <Button onClick={() => openModal(<h1>Register</h1>)} size="huge">
+              Register
+            </Button>
+          </>
         )}
       </Container>
     </Segment>
