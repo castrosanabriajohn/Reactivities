@@ -33,4 +33,13 @@ export default class UserStore {
     runInAction(() => (this.user = null));
     history.push("/");
   };
+
+  getUser = async () => {
+    try {
+      const user = await agent.accountRequests.current();
+      runInAction(() => (this.user = user));
+    } catch (e) {
+      console.log(e);
+    }
+  };
 }

@@ -28,7 +28,7 @@ export const HomePage = () => {
               content="Welcome to the activities application"
             />
             <Button as={Link} to="/activities" size="huge">
-              Go to application
+              Go to dashboard
             </Button>
           </>
         ) : (
