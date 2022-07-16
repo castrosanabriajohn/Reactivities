@@ -20,7 +20,7 @@ const ActivityListItem = ({ activity }: Props) => {
               <Item.Header as={Link} to={`/activities/${activity.id}`}>
                 {activity.title}
               </Item.Header>
-              <Item.Description>Hosted by username</Item.Description>
+              <Item.Description>Anfitrión: usuario</Item.Description>
             </Item.Content>
           </Item>
         </Item.Group>
@@ -33,7 +33,7 @@ const ActivityListItem = ({ activity }: Props) => {
           {activity.venue}
         </span>
       </Segment>
-      <Segment secondary>Attendees</Segment>
+      <Segment secondary>Asistentes</Segment>
       <Segment clearing>
         <span>{activity.description}</span>
         <Button

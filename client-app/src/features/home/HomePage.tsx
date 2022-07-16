@@ -21,17 +21,17 @@ export const HomePage = () => {
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          NovaActivities
+          NovaActividades
         </Header>
         {isLoggedIn ? (
           <>
             <Header
               as="h2"
               inverted
-              content="Welcome to the activities application"
+              content="Bienvenido a la aplicación de NovaActividades"
             />
             <Button as={Link} to="/activities" size="huge">
-              Go to dashboard
+              Ir al tablero
             </Button>
           </>
         ) : (
@@ -40,7 +40,7 @@ export const HomePage = () => {
               Login
             </Button>
             <Button onClick={() => openModal(<RegisterForm />)} size="huge">
-              Register
+              Registrarme
             </Button>
           </>
         )}

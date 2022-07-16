@@ -13,16 +13,16 @@ const NavBar = () => {
       <Container>
         <Menu.Item as={NavLink} to="/" exact header>
           <img src="assets/logo.png" alt="logo" style={{ marginRight: 10 }} />
-          Reactivities
+          NovaActividades
         </Menu.Item>
-        <Menu.Item as={NavLink} to="/activities" name="Activities" />
-        <Menu.Item as={NavLink} to="/errors" name="Errors" />
+        <Menu.Item as={NavLink} to="/activities" name="Agenda de Actividades" />
+        <Menu.Item as={NavLink} to="/errors" name="Pruebas de Errores" />
         <Menu.Item>
           <Button
             as={NavLink}
             to="/createActivity"
             positive
-            content="Create Activity"
+            content="Agendar Actividades"
           />
         </Menu.Item>
         <Menu.Item position="right">
@@ -32,10 +32,14 @@ const NavBar = () => {
               <Dropdown.Item
                 as={Link}
                 to={`/profile/${user?.username}`}
-                text="My Profile"
+                text="Ir a mi Perfíl"
                 icon="user"
               />
-              <Dropdown.Item onClick={logout} text="Logout" icon="power" />
+              <Dropdown.Item
+                onClick={logout}
+                text="Cerrar la Sesión"
+                icon="power"
+              />
             </Dropdown.Menu>
           </Dropdown>
         </Menu.Item>

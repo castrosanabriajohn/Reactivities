@@ -7,10 +7,10 @@ const ActivityFilter = () => {
   return (
     <>
       <Menu vertical size="large" style={{ width: "100%", marginTop: 34 }}>
-        <Header icon="filter" attached color="teal" content="Filters" />
-        <Menu.Item content="All activities" />
-        <Menu.Item content="I'm going" />
-        <Menu.Item content="I'm hosting" />
+        <Header icon="filter" attached color="teal" content="Filtrar" />
+        <Menu.Item content="Todas las Actividades" />
+        <Menu.Item content="Voy a Ir" />
+        <Menu.Item content="Soy Anfitrión" />
       </Menu>
       <Calendar />
     </>

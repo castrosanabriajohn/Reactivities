@@ -5,8 +5,9 @@ import { useStore } from "../../../app/stores/store";
 import ActivityListItem from "./ActivityListItem";
 
 const ActivityList = () => {
-  const { activityStore } = useStore();
-  const { activitiesGrouped } = activityStore;
+  const {
+    activityStore: { activitiesGrouped },
+  } = useStore();
 
   return (
     <>
@@ -15,11 +16,11 @@ const ActivityList = () => {
           <Header sub color="teal">
             {group}
           </Header>
-            <Item.Group>
-              {array.map((activity) => (
-                <ActivityListItem key={activity.id} activity={activity} />
-              ))}
-            </Item.Group>
+          <Item.Group>
+            {array.map((activity) => (
+              <ActivityListItem key={activity.id} activity={activity} />
+            ))}
+          </Item.Group>
         </Fragment>
       ))}
     </>

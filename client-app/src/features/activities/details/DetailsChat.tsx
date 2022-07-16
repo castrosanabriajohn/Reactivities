@@ -12,20 +12,20 @@ const DetailsChat = () => {
         color="teal"
         style={{ border: "none" }}
       >
-        <Header>Chat about this event</Header>
+        <Header>Chatea sobre este evento</Header>
       </Segment>
       <Segment attached>
         <Comment.Group>
           <Comment>
             <Comment.Avatar src="/assets/user.png" />
             <Comment.Content>
-              <Comment.Author as="a">Matt</Comment.Author>
+              <Comment.Author as="a">Mateo Zamora</Comment.Author>
               <Comment.Metadata>
-                <div>Today at 5:42PM</div>
+                <div>Hoy a las 5:42PM</div>
               </Comment.Metadata>
-              <Comment.Text>How artistic!</Comment.Text>
+              <Comment.Text>Muy artistico!</Comment.Text>
               <Comment.Actions>
-                <Comment.Action>Reply</Comment.Action>
+                <Comment.Action>Responder</Comment.Action>
               </Comment.Actions>
             </Comment.Content>
           </Comment>
@@ -33,13 +33,13 @@ const DetailsChat = () => {
           <Comment>
             <Comment.Avatar src="/assets/user.png" />
             <Comment.Content>
-              <Comment.Author as="a">Joe Henderson</Comment.Author>
+              <Comment.Author as="a">Joel Hernandez</Comment.Author>
               <Comment.Metadata>
-                <div>5 days ago</div>
+                <div>Hace 5 días</div>
               </Comment.Metadata>
-              <Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
+              <Comment.Text>Que genial, yo me apunto!</Comment.Text>
               <Comment.Actions>
-                <Comment.Action>Reply</Comment.Action>
+                <Comment.Action>Responder</Comment.Action>
               </Comment.Actions>
             </Comment.Content>
           </Comment>
@@ -47,7 +47,7 @@ const DetailsChat = () => {
           <Form reply>
             <Form.TextArea />
             <Button
-              content="Add Reply"
+              content="Agregar Respuesta"
               labelPosition="left"
               icon="edit"
               primary
