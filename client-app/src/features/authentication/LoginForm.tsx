@@ -21,7 +21,7 @@ const LoginForm = () => {
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <Header
             as="h2"
-            content="Login to activities"
+            content="Login to NovaActivities"
             color="teal"
             textAlign="center"
           />

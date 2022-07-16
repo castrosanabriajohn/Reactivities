@@ -4,6 +4,7 @@ import { Container, Header, Segment, Image, Button } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/stores/store";
 import LoginForm from "../authentication/LoginForm";
+import RegisterForm from "../authentication/RegisterForm";
 
 export const HomePage = () => {
   const {
@@ -38,7 +39,7 @@ export const HomePage = () => {
             <Button onClick={() => openModal(<LoginForm />)} size="huge">
               Login
             </Button>
-            <Button onClick={() => openModal(<h1>Register</h1>)} size="huge">
+            <Button onClick={() => openModal(<RegisterForm />)} size="huge">
               Register
             </Button>
           </>
