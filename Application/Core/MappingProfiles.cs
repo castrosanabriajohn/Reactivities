@@ -10,24 +10,24 @@ namespace Application.Core
     {
       CreateMap<Activity, Activity>();
       CreateMap<Activity, ActivityDto>()
-      .ForMember((d) => d.HostUserName,
-      (opt) => opt.MapFrom(
-        (s) => s.Attendees.FirstOrDefault(
-        (aa) => aa.IsHost).AppUser.UserName)
-      );
-      CreateMap<ActivityAttendee, Profiles.Profile>()
-      .ForMember((d) => d.DisplayName,
-      (opt) => opt.MapFrom(
-        (s) => s.AppUser.DisplayName)
-      )
-      .ForMember((d) => d.UserName,
-      (opt) => opt.MapFrom(
-        (s) => s.AppUser.UserName)
-      )
-      .ForMember((d) => d.Bio,
+        .ForMember((d) => d.HostUserName,
         (opt) => opt.MapFrom(
-          (s) => s.AppUser.Bio)
-      );
+          (s) => s.Attendees.FirstOrDefault(
+          (aa) => aa.IsHost).AppUser.UserName)
+        );
+      CreateMap<ActivityAttendee, Profiles.Profile>()
+        .ForMember((d) => d.DisplayName,
+        (opt) => opt.MapFrom(
+          (s) => s.AppUser.DisplayName)
+        )
+        .ForMember((d) => d.UserName,
+        (opt) => opt.MapFrom(
+          (s) => s.AppUser.UserName)
+        )
+        .ForMember((d) => d.Bio,
+          (opt) => opt.MapFrom(
+            (s) => s.AppUser.Bio)
+        );
     }
   }
 }

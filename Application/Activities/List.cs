@@ -1,5 +1,6 @@
 using Application.Core;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -37,11 +38,9 @@ namespace Application.Activities
           _logger.LogInformation("Task was cancelled");
         }
         var activities = await _context.Activities
-        .Include((a) => a.Attendees)
-        .ThenInclude((u) => u.AppUser)
-        .ToListAsync(cancellationToken);
-        var ActivitiesWithAttendees = _mapper.Map<List<ActivityDto>>(activities);
-        return Result<List<ActivityDto>>.Success(ActivitiesWithAttendees);
+          .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+          .ToListAsync(cancellationToken);
+        return Result<List<ActivityDto>>.Success(activities);
       }
     }
   }
