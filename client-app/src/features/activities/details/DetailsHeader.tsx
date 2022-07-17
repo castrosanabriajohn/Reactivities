@@ -41,7 +41,7 @@ const DetailsHeader = ({ activity }: Props) => {
                 />
                 <p>{format(activity.date!, "dd MMM yyyy")}</p>
                 <p>
-                  Anfitrion <strong>Usuario</strong>
+                  Anfitrión <strong>Usuario</strong>
                 </p>
               </Item.Content>
             </Item>
@@ -49,12 +49,12 @@ const DetailsHeader = ({ activity }: Props) => {
         </Segment>
       </Segment>
       <Segment clearing attached="bottom">
-        <Button color="teal">Confirmar Asistencia</Button>
-        <Button>Cancelar Asistencia</Button>
+        <Button color="instagram">Confirmar Asistencia</Button>
+        <Button color="google plus">Cancelar Asistencia</Button>
         <Button
           as={Link}
           to={`/manage/${activity.id}`}
-          color="orange"
+          color="linkedin"
           floated="right"
         >
           Administrar Evento

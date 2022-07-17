@@ -9,7 +9,7 @@ const DetailsChat = () => {
         textAlign="center"
         attached="top"
         inverted
-        color="teal"
+        color="blue"
         style={{ border: "none" }}
       >
         <Header>Chatea sobre este evento</Header>
@@ -19,11 +19,11 @@ const DetailsChat = () => {
           <Comment>
             <Comment.Avatar src="/assets/user.png" />
             <Comment.Content>
-              <Comment.Author as="a">Mateo Zamora</Comment.Author>
+              <Comment.Author as="a">Mateo Zúñiga</Comment.Author>
               <Comment.Metadata>
                 <div>Hoy a las 5:42PM</div>
               </Comment.Metadata>
-              <Comment.Text>Muy artistico!</Comment.Text>
+              <Comment.Text>Muy artístico!</Comment.Text>
               <Comment.Actions>
                 <Comment.Action>Responder</Comment.Action>
               </Comment.Actions>

@@ -12,16 +12,16 @@ const DetailsSidebar = () => {
         attached="top"
         secondary
         inverted
-        color="teal"
+        color="blue"
       >
-        3 Personas han confirmado
+        <strong>3 Personas</strong> han confirmado
       </Segment>
       <Segment attached>
         <List relaxed divided>
           <Item style={{ position: "relative" }}>
             <Label
               style={{ position: "absolute" }}
-              color="orange"
+              color="violet"
               ribbon="right"
             >
               Anfitrión
@@ -29,7 +29,7 @@ const DetailsSidebar = () => {
             <Image size="tiny" src={"/assets/user.png"} />
             <Item.Content verticalAlign="middle">
               <Item.Header as="h3">
-                <Link to={`#`}>Usario 1</Link>
+                <Link to={`#`}>Usuario #1</Link>
               </Item.Header>
               <Item.Extra style={{ color: "orange" }}>Siguiendo</Item.Extra>
             </Item.Content>
@@ -39,9 +39,9 @@ const DetailsSidebar = () => {
             <Image size="tiny" src={"/assets/user.png"} />
             <Item.Content verticalAlign="middle">
               <Item.Header as="h3">
-                <Link to={`#`}>Usuario 2</Link>
+                <Link to={`#`}>Usuario #2</Link>
               </Item.Header>
-              <Item.Extra style={{ color: "orange" }}>Siguiend</Item.Extra>
+              <Item.Extra style={{ color: "orange" }}>Siguiendo</Item.Extra>
             </Item.Content>
           </Item>
 
@@ -49,7 +49,7 @@ const DetailsSidebar = () => {
             <Image size="tiny" src={"/assets/user.png"} />
             <Item.Content verticalAlign="middle">
               <Item.Header as="h3">
-                <Link to={`#`}>Usuario 3</Link>
+                <Link to={`#`}>Usuario #3</Link>
               </Item.Header>
             </Item.Content>
           </Item>
