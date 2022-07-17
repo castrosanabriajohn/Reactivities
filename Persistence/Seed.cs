@@ -5,7 +5,6 @@ namespace Persistence
 {
   public class Seed
   {
-    // Static method (inside class method) that receives the data context as a parameter
     public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
     {
       if (!userManager.Users.Any())
