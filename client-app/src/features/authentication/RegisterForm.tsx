@@ -2,9 +2,10 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/stores/store";
 import { ErrorMessage, Form, Formik } from "formik";
-import { Button, Header, Label } from "semantic-ui-react";
+import { Button, Header } from "semantic-ui-react";
 import TextInput from "../activities/form/TextInput";
 import * as Yup from "yup";
+import ValidationErrors from "../errors/ValidationErrors";
 
 const RegisterForm = () => {
   const {
@@ -21,21 +22,27 @@ const RegisterForm = () => {
       }}
       onSubmit={(values, { setErrors }) =>
         register(values).catch(
-          (error) => setErrors({ error: "Invalid email or password" }) // In case an error occurs in the catch block sets the error
+          (error) => setErrors({ error }) // In case an error occurs in the catch block sets the error
         )
       }
       validationSchema={Yup.object({
-        displayName: Yup.string().required(),
-        username: Yup.string().required(),
-        email: Yup.string().required().email(),
-        password: Yup.string().required(),
+        displayName: Yup.string().required("Nombre a mostrar es requerido"),
+        username: Yup.string().required("El nombre de usuario es requerido"),
+        email: Yup.string()
+          .required("Un correo electrónico válido es requerido")
+          .email(),
+        password: Yup.string().required("Una contraseña válida es requerida"),
       })}
     >
       {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
-        <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
+        <Form
+          className="ui form error"
+          onSubmit={handleSubmit}
+          autoComplete="off"
+        >
           <Header
             as="h2"
-            content="Registrese a NovaActividades"
+            content="Regístrese a NovaActividades"
             color="teal"
             textAlign="center"
           />
@@ -45,20 +52,14 @@ const RegisterForm = () => {
           <TextInput name="password" placeholder="Contraseña" />
           <ErrorMessage
             name="error"
-            render={() => (
-              <Label
-                content={errors.error}
-                style={{ marginBottom: 10 }}
-                basic
-                color="red"
-              />
-            )}
+            render={() => <ValidationErrors errors={errors.error} />}
           />
           <Button
             disabled={!isValid || !dirty || isSubmitting}
             loading={isSubmitting}
             positive
-            content="Registrese a NovaActividades"
+            content="Regístrese a NovaActividades"
+            type="submit"
             fluid
           />
         </Form>
