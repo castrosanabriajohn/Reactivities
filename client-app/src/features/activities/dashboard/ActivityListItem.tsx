@@ -41,7 +41,7 @@ const ActivityListItem = ({ activity }: Props) => {
           to={`/activities/${activity.id}`}
           color="teal"
           floated="right"
-          content="View"
+          content="Ver"
         />
       </Segment>
     </Segment.Group>

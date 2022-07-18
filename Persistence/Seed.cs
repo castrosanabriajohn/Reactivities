@@ -7,24 +7,22 @@ namespace Persistence
   {
     public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
     {
-      if (!userManager.Users.Any())
+      if (!userManager.Users.Any() && !context.Activities.Any())
       {
         var users = new List<AppUser>
         {
             new AppUser{DisplayName = "John", UserName = "jcastro", Email = "jcastro@crnova.com"},
             new AppUser{DisplayName = "Sergio", UserName = "szuniga", Email = "tmiller@crnova.com"},
             new AppUser{DisplayName = "Nicole", UserName = "agarcia", Email = "ngarcia@crnova.com"},
+            new AppUser{DisplayName = "Bob", UserName = "bob", Email = "bob@test.com"},
+            new AppUser{DisplayName = "Jane", UserName = "jane", Email = "jane@test.com"},
+            new AppUser{DisplayName = "Tom", UserName = "tom", Email = "tom@test.com"},
         };
         foreach (var user in users)
         {
           await userManager.CreateAsync(user, "Pa$$w0rd");
         }
-      }
-      // Checks for records in the database
-      if (context.Activities.Any()) return;
-      // If the database is empty
-      // Create a list of activities
-      var activities = new List<Activity>
+        var activities = new List<Activity>
         {
             new Activity
             {
@@ -34,6 +32,14 @@ namespace Persistence
                 Category = "yoga",
                 City = "Curridabat",
                 Venue = "Casa de Juan",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[0],
+                        IsHost = true
+                    }
+                }
             },
             new Activity
             {
@@ -43,6 +49,14 @@ namespace Persistence
                 Category = "speech",
                 City = "Curridabat",
                 Venue = "Oficina ·3",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[0],
+                        IsHost = false
+                    }
+                }
             },
             new Activity
             {
@@ -52,6 +66,14 @@ namespace Persistence
                 Category = "party",
                 City = "San José",
                 Venue = "Casa de Gabriel",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[1],
+                        IsHost = true,
+                    }
+                }
             },
             new Activity
             {
@@ -61,6 +83,14 @@ namespace Persistence
                 Category = "speech",
                 City = "Curridabat",
                 Venue = "Oficina 34",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[1],
+                        IsHost = false,
+                    }
+                }
             },
             new Activity
             {
@@ -70,6 +100,14 @@ namespace Persistence
                 Category = "speech",
                 City = "San José",
                 Venue = "Sabana",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[2],
+                        IsHost = false,
+                    }
+                }
             },
             new Activity
             {
@@ -79,6 +117,14 @@ namespace Persistence
                 Category = "meeting",
                 City = "Curridabat",
                 Venue = "Casa de Steven",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[2],
+                        IsHost = true,
+                    }
+                }
             },
             new Activity
             {
@@ -88,6 +134,14 @@ namespace Persistence
                 Category = "meeting",
                 City = "Cartago",
                 Venue = "Casa de Emilio",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[3],
+                        IsHost = false,
+                    }
+                }
             },
             new Activity
             {
@@ -97,6 +151,14 @@ namespace Persistence
                 Category = "speech",
                 City = "Escazu",
                 Venue = "Hotel Real Intercontinental",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[0],
+                        IsHost = true
+                    }
+                }
             },
             new Activity
             {
@@ -106,6 +168,14 @@ namespace Persistence
                 Category = "food",
                 City = "San Pedro",
                 Venue = "Restaurante Applebees",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[0],
+                        IsHost = false
+                    }
+                }
             },
             new Activity
             {
@@ -115,12 +185,21 @@ namespace Persistence
                 Category = "christmas",
                 City = "Curridabat",
                 Venue = "Oficina Principal",
+                Attendees = new List<ActivityAttendee>
+                {
+                    new ActivityAttendee
+                    {
+                        AppUser = users[2],
+                        IsHost = true
+                    }
+                }
             }
         };
-      // Add the range of activities asynchronously.
-      await context.Activities.AddRangeAsync(activities);
-      // Save the changes (execute query)
-      await context.SaveChangesAsync();
+        // Add the range of activities asynchronously.
+        await context.Activities.AddRangeAsync(activities);
+        // Save the changes (execute query)
+        await context.SaveChangesAsync();
+      }
     }
   }
 }
