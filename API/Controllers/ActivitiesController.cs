@@ -1,6 +1,7 @@
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Application.Activities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -21,6 +22,7 @@ namespace API.Controllers
     {
       return HandleResult(await Mediator.Send(new Create.Command { Activity = activity }));
     }
+    [Authorize(Policy = "IsHostPolicy")]
     [HttpPut("{id}")]
     public async Task<IActionResult> EditActivity(Guid id, Activity activity)
     {
@@ -28,7 +30,7 @@ namespace API.Controllers
       activity.Id = id;
       return HandleResult(await Mediator.Send(new Edit.Command { Activity = activity }));
     }
-    // Endpoint for deleting
+    [Authorize(Policy = "IsHostPolicy")]
     [HttpDelete("{id}")] // route parameter
     public async Task<IActionResult> DeleteActivity(Guid id)
     {
