@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Icon, Item, Segment } from "semantic-ui-react";
+import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -11,6 +11,7 @@ interface Props {
 }
 
 const ActivityListItem = ({ activity }: Props) => {
+  console.log(activity.isHost);
   return (
     <Segment.Group>
       <Segment>
@@ -21,7 +22,23 @@ const ActivityListItem = ({ activity }: Props) => {
               <Item.Header as={Link} to={`/activities/${activity.id}`}>
                 {activity.title}
               </Item.Header>
-              <Item.Description>Anfitrión: usuario</Item.Description>
+              <Item.Description>
+                Admin: {activity.host?.displayName}
+              </Item.Description>
+              {activity.isHost && (
+                <Item.Description>
+                  <Label basic color="violet">
+                    Eres administrador(a)
+                  </Label>
+                </Item.Description>
+              )}
+              {activity.isGoing && !activity.isHost && (
+                <Item.Description>
+                  <Label basic color="green">
+                    Has confirmado tu asistencia
+                  </Label>
+                </Item.Description>
+              )}
             </Item.Content>
           </Item>
         </Item.Group>

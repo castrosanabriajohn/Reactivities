@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Activity } from "../models/activity";
+import { store } from "./store";
 
 export default class ActivityStore {
   activityRegistry = new Map<string, Activity>();
@@ -59,8 +60,6 @@ export default class ActivityStore {
         this.toggleInitialLoadingState();
       }
     }
-    console.log(this.initialLoadingState);
-    console.log(this.currentActivity?.description);
   };
 
   private helperGetSingleActivity = (id: string) => {
@@ -68,6 +67,21 @@ export default class ActivityStore {
   };
 
   private helperSetActivity = (activity: Activity) => {
+    // get reference to user object from the user store
+    const u = store.userStore.user!;
+    console.log(u.userName);
+    // check for user object to if is authenticated
+    if (u) {
+      activity.isGoing = activity.attendees!.some(
+        (p) => p.userName === u.userName // if an user is going then set is going to true
+      );
+      // set the host property to true if the activity hostUsername is equal to the current user
+      activity.isHost = activity.hostUserName === u.userName;
+      // set the host property
+      activity.host = activity.attendees?.find(
+        (p) => p.userName === activity.hostUserName
+      );
+    }
     activity.date = new Date(activity.date!);
     runInAction(() => this.activityRegistry.set(activity.id, activity));
   };

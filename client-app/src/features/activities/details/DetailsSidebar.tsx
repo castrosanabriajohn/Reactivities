@@ -2,13 +2,14 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Segment, List, Label, Item, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { Profile } from "../../../app/models/profile";
+import { Activity } from "../../../app/models/activity";
 
 interface Props {
-  attendees: Profile[];
+  activity: Activity;
 }
 
-const DetailsSidebar = ({ attendees }: Props) => {
+const DetailsSidebar = ({ activity: { attendees, host } }: Props) => {
+  if (!attendees) return null;
   return (
     <>
       <Segment
@@ -22,23 +23,26 @@ const DetailsSidebar = ({ attendees }: Props) => {
         <strong>
           {attendees.length} {attendees.length === 1 ? "Persona" : "Personas"}{" "}
         </strong>
-        han confirmado
+        {attendees.length === 1 ? "ha " : "han "}
+        {"confirmado"}
       </Segment>
       <Segment attached>
         <List relaxed divided>
           {attendees.map((a) => (
-            <Item style={{ position: "relative" }} key={a.username}>
-              <Label
-                style={{ position: "absolute" }}
-                color="violet"
-                ribbon="right"
-              >
-                Anfitrión
-              </Label>
+            <Item style={{ position: "relative" }} key={a.userName}>
+              {a.userName === host?.userName && (
+                <Label
+                  style={{ position: "absolute" }}
+                  color="violet"
+                  ribbon="right"
+                >
+                  Anfitrión
+                </Label>
+              )}
               <Image size="tiny" src={a.image || "/assets/user.png"} />
               <Item.Content verticalAlign="middle">
                 <Item.Header as="h3">
-                  <Link to={`/profiles/${a.username}`}>{a.displayName}</Link>
+                  <Link to={`/profiles/${a.userName}`}>{a.displayName}</Link>
                 </Item.Header>
                 <Item.Extra style={{ color: "orange" }}>Siguiendo</Item.Extra>
               </Item.Content>

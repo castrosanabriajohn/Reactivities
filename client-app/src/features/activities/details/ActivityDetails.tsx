@@ -26,7 +26,7 @@ const ActivityDetails = () => {
         <DetailsChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <DetailsSidebar attendees={currentActivity.attendees!} />
+        <DetailsSidebar activity={currentActivity} />
       </Grid.Column>
     </Grid>
   );
