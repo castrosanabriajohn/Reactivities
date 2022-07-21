@@ -1,9 +1,9 @@
-import { format } from "date-fns";
-import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Activity } from "../models/activity";
+import { Activity, ActivityFormValues } from "../models/activity";
 import { Profile } from "../models/profile";
 import { store } from "./store";
+import { format } from "date-fns";
+import { makeAutoObservable, runInAction } from "mobx";
 
 export default class ActivityStore {
   activityRegistry = new Map<string, Activity>();
@@ -94,32 +94,36 @@ export default class ActivityStore {
 
   toggleLoadingFlag = () => (this.isLoadingFlag = !this.isLoadingFlag);
 
-  createActivity = async (activity: Activity) => {
-    this.toggleLoadingFlag();
+  createActivity = async (activity: ActivityFormValues) => {
+    const u = store.userStore.user;
+    const att = new Profile(u!);
     try {
       await agent.activitiesRequests.create(activity);
-      this.activityRegistry.set(activity.id, activity);
-      this.currentActivity = activity;
-      this.toggleFormFlag();
-      this.toggleLoadingFlag();
+      const newActivity = new Activity(activity);
+      newActivity.hostUserName = u!.userName;
+      newActivity.attendees = [att];
+      this.helperSetActivity(newActivity);
+      this.currentActivity = newActivity;
     } catch (e) {
-      this.toggleFormFlag();
-      this.toggleLoadingFlag();
+      console.log(e);
     }
   };
 
-  updateActivity = async (activity: Activity) => {
-    this.toggleLoadingFlag();
+  updateActivity = async (activity: ActivityFormValues) => {
     try {
-      await agent.activitiesRequests.update(activity).then(() => {
-        this.activityRegistry.set(activity.id, activity);
-        this.currentActivity = activity;
-        this.toggleFormFlag();
-        this.toggleLoadingFlag();
+      await agent.activitiesRequests.update(activity);
+      runInAction(() => {
+        if (activity.id) {
+          let updatedActivity = {
+            ...this.helperGetSingleActivity(activity.id),
+            ...activity,
+          };
+          this.activityRegistry.set(activity.id, updatedActivity as Activity);
+          this.currentActivity = updatedActivity as Activity;
+        }
       });
     } catch (e) {
       console.log(e);
-      this.toggleLoadingFlag();
     }
   };
 

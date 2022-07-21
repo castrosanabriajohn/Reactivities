@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { Button, Header, Segment } from "semantic-ui-react";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
-import { useStore } from "../../../app/stores/store";
-import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import TextInput from "./TextInput";
-import { observer } from "mobx-react-lite";
-import TextArea from "./TextArea";
-import DropdownInput from "./DropdownInput";
+import { Formik, Form } from "formik";
+import { ActivityFormValues } from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
 import { categoryOptions } from "./categoryOptions";
+import { Button, Header, Segment } from "semantic-ui-react";
+import DropdownInput from "./DropdownInput";
+import TextInput from "./TextInput";
+import TextArea from "./TextArea";
 import DateInput from "./DateInput";
-import { Activity } from "../../../app/models/activity";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { v4 as uuid } from "uuid";
+import { observer } from "mobx-react-lite";
 
 const ActivityForm = () => {
   const history = useHistory();
@@ -20,20 +20,13 @@ const ActivityForm = () => {
   const {
     createActivity,
     updateActivity,
-    isLoadingFlag,
     loadSingleActivity,
     initialLoadingState,
   } = activityStore;
   const { id } = useParams<{ id: string }>();
-  const [formActivity, setFormActivity] = useState<Activity>({
-    id: "",
-    title: "",
-    category: "",
-    description: "",
-    date: null,
-    city: "",
-    venue: "",
-  });
+  const [formActivity, setFormActivity] = useState<ActivityFormValues>(
+    new ActivityFormValues()
+  );
   const validationSchema = Yup.object({
     title: Yup.string().required(),
     category: Yup.string().required(),
@@ -45,11 +38,13 @@ const ActivityForm = () => {
 
   useEffect(() => {
     if (id)
-      loadSingleActivity(id).then((actitivity) => setFormActivity(actitivity!));
+      loadSingleActivity(id).then((actitivity) =>
+        setFormActivity(new ActivityFormValues(actitivity))
+      );
   }, [id, loadSingleActivity]); // as long as the dependencies don't change will only execute once
 
-  const handleFormSubmit = (formActivity: Activity) => {
-    if (formActivity.id.length === 0) {
+  const handleFormSubmit = (formActivity: ActivityFormValues) => {
+    if (!formActivity.id) {
       let newActivity = { ...formActivity, id: uuid() };
       createActivity(newActivity).then(() =>
         history.push(`/activities/${newActivity.id}`)
@@ -96,7 +91,7 @@ const ActivityForm = () => {
               positive
               type="submit"
               content="Enviar"
-              loading={isLoadingFlag}
+              loading={isSubmitting}
             />
             <Button
               as={Link}
