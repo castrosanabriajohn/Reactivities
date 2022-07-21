@@ -70,7 +70,6 @@ export default class ActivityStore {
   private helperSetActivity = (activity: Activity) => {
     // get reference to user object from the user store
     const u = store.userStore.user!;
-    console.log(u.userName);
     // check for user object to if is authenticated
     if (u) {
       activity.isGoing = activity.attendees!.some(
