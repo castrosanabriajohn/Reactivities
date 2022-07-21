@@ -168,4 +168,22 @@ export default class ActivityStore {
       runInAction(() => this.toggleLoadingFlag());
     }
   };
+
+  cancelActivityToggle = async () => {
+    this.toggleLoadingFlag();
+    try {
+      await agent.activitiesRequests.attend(this.currentActivity!.id);
+      runInAction(() => {
+        this.currentActivity!.isCancelled = !this.currentActivity?.isCancelled;
+        this.activityRegistry.set(
+          this.currentActivity!.id,
+          this.currentActivity!
+        );
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.toggleLoadingFlag();
+    }
+  };
 }

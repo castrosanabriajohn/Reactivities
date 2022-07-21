@@ -1,10 +1,10 @@
 import React from "react";
-import { observer } from "mobx-react-lite";
-import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
 import { Link } from "react-router-dom";
+import { Activity } from "../../../app/models/activity";
 import { format } from "date-fns";
 import ListItem from "../../attendees/ListItem";
+import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
+import { observer } from "mobx-react-lite";
 
 interface Props {
   activity: Activity;
@@ -15,6 +15,14 @@ const ActivityListItem = ({ activity }: Props) => {
   return (
     <Segment.Group>
       <Segment>
+        {activity.isCancelled && (
+          <Label
+            attached="top"
+            color="red"
+            content="Cancelado"
+            style={{ textAlign: "center" }}
+          />
+        )}
         <Item.Group>
           <Item>
             <Item.Image size="tiny" circular src="/assets/user.png" />

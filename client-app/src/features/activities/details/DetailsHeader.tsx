@@ -1,10 +1,10 @@
 import React from "react";
-import { observer } from "mobx-react-lite";
-import { Button, Header, Item, Segment, Image } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import { useStore } from "../../../app/stores/store";
+import { Activity } from "../../../app/models/activity";
+import { Button, Header, Item, Segment, Image, Label } from "semantic-ui-react";
+import { format } from "date-fns";
+import { observer } from "mobx-react-lite";
 
 const activityImageStyle = {
   filter: "brightness(30%)",
@@ -24,11 +24,19 @@ interface Props {
 }
 const DetailsHeader = ({ activity }: Props) => {
   const {
-    activityStore: { updateAttendance, isLoadingFlag },
+    activityStore: { updateAttendance, isLoadingFlag, cancelActivityToggle },
   } = useStore();
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
+        {activity.isCancelled && (
+          <Label
+            style={{ position: "absolute", zIndex: 1000, left: -14, top: 20 }}
+            ribbon
+            color="red"
+            content="Cancelado"
+          />
+        )}
         <Image
           src={`/assets/categoryImages/${activity.category}.jpg`}
           fluid
@@ -59,14 +67,24 @@ const DetailsHeader = ({ activity }: Props) => {
       </Segment>
       <Segment clearing attached="bottom">
         {activity.isHost ? (
-          <Button
-            as={Link}
-            to={`/manage/${activity.id}`}
-            color="linkedin"
-            floated="right"
-          >
-            Administrar Evento
-          </Button>
+          <>
+            <Button
+              color={activity.isCancelled ? "green" : "google plus"}
+              floated="left"
+              content={activity.isCancelled ? "Re-activar" : "Cancelar"}
+              onClick={cancelActivityToggle}
+              loading={isLoadingFlag}
+            />
+            <Button
+              as={Link}
+              to={`/manage/${activity.id}`}
+              disabled={activity.isCancelled}
+              color="linkedin"
+              floated="right"
+            >
+              Administrar Evento
+            </Button>
+          </>
         ) : activity.isGoing ? (
           <Button
             onClick={updateAttendance}
@@ -78,6 +96,7 @@ const DetailsHeader = ({ activity }: Props) => {
         ) : (
           <Button
             onClick={updateAttendance}
+            disabled={activity.isCancelled}
             loading={isLoadingFlag}
             color="instagram"
           >
