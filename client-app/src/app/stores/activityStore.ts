@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Activity } from "../models/activity";
+import { Profile } from "../models/profile";
 import { store } from "./store";
 
 export default class ActivityStore {
@@ -132,6 +133,35 @@ export default class ActivityStore {
     } catch (e) {
       console.log(e);
       this.toggleLoadingFlag();
+    }
+  };
+
+  updateAttendance = async () => {
+    const u = store.userStore.user;
+    this.toggleLoadingFlag();
+    try {
+      await agent.activitiesRequests.attend(this.currentActivity!.id);
+      runInAction(() => {
+        if (this.currentActivity?.isGoing) {
+          this.currentActivity.attendees =
+            this.currentActivity.attendees?.filter(
+              (a) => a.userName === u?.userName
+            );
+          this.currentActivity!.isGoing = false;
+        } else {
+          const newAttendee = new Profile(u!);
+          this.currentActivity?.attendees?.push(newAttendee);
+          this.currentActivity!.isGoing = true;
+        }
+        this.activityRegistry.set(
+          this.currentActivity!.id,
+          this.currentActivity!
+        );
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      runInAction(() => this.toggleLoadingFlag());
     }
   };
 }
